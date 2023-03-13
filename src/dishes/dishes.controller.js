@@ -25,7 +25,7 @@ function bodyDataHas(propertyName) {
       return next();
     }
     next({
-      status: 400,
+      status: 404,
       message: `Dish ID not found: ${dishId}`
     })
   }
@@ -37,7 +37,7 @@ function bodyDataHas(propertyName) {
   function create(req, res, next) {
     const { data: {name, description, price, image_url} = {} } = req.body;
     const newDish = {
-      id: nextId,
+      id: nextId(),
       name,
       description,
       price,
