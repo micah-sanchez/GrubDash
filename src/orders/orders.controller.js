@@ -70,6 +70,7 @@ function validateOrder(req, res, next) {
     const foundOrder = orders.find((order) => order.id === orderId);
 
     if (foundOrder) {
+        //res.locals.order = foundOrder;
         return next()
     }
     next({ 
@@ -97,6 +98,7 @@ function update(req, res, next) {
 
     res.json({ data: foundOrder })
   }
+
 
   function destroy(req, res, next) {
     const { orderId } = req.params;
