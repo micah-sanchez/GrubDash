@@ -36,7 +36,6 @@ function bodyDataHas(propertyName) {
   }
   
   function list(req, res, next) {
-    console.log("list")
     res.json({data: dishes})
   }
   
