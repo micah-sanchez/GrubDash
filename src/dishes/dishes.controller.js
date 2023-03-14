@@ -10,6 +10,11 @@ const nextId = require("../utils/nextId");
 function bodyDataHas(propertyName) {
     return function (req, res, next) {
       const { data = {} } = req.body;
+      if (propertyName === "price" && data[propertyName] <= 0 || propertyName === "price" && typeof data[propertyName] !== "number") {
+        return next({
+            status: 400, message: `Dish must have a price that is an integer greater than 0`
+        }) 
+      } 
       if (data[propertyName]) {
         return next();
       }
@@ -19,7 +24,7 @@ function bodyDataHas(propertyName) {
   
   function validateDish(req, res, next) {
     const { dishId } = req.params;
-    const foundDish = dishes.find((dish) => dish.id === Number(dishId))
+    const foundDish = dishes.find((dish) => dish.id === dishId)
     
     if (foundDish) {
       return next();
@@ -31,6 +36,7 @@ function bodyDataHas(propertyName) {
   }
   
   function list(req, res, next) {
+    console.log("list")
     res.json({data: dishes})
   }
   
@@ -49,9 +55,23 @@ function bodyDataHas(propertyName) {
   
   function read(req, res, next) {
     const { dishId } = req.params;
-    const foundDish = dishes.find((dish) => dish.id === Number(dishId))
+    const foundDish = dishes.find((dish) => dish.id === dishId);
     
     res.json({data: foundDish});
+  }
+
+  function update(req, res, next) {
+    const { dishId } = req.params;
+    const foundDish = dishes.find((dish) => dish.id === dishId);
+
+    const { data: { name, description, price, image_url } = {} } = req.body;
+
+    foundDish.name = name;
+    foundDish.description = description;
+    foundDish.price = price;
+    foundDish.image_url = image_url;
+
+    res.json({ data: foundDish })
   }
   
   module.exports = {
@@ -64,5 +84,13 @@ function bodyDataHas(propertyName) {
       create,],
     read: [
       validateDish,
-      read,]
+      read,],
+    update: [
+      validateDish, 
+      bodyDataHas("name"),
+      bodyDataHas("description"),
+      bodyDataHas("price"),
+      bodyDataHas("image_url"),
+      update,
+    ]
   }
