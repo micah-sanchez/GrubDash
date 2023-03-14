@@ -98,6 +98,22 @@ function update(req, res, next) {
     res.json({ data: foundOrder })
   }
 
+  function destroy(req, res, next) {
+    const { orderId } = req.params;
+    const index = orders.findIndex((order, index) => order.id === orderId);
+    const orderStatus = orders[index].status;
+    if (orderStatus === "pending") {
+        const deletedOrder = orders.splice(index, 1);
+        res.sendStatus(204);
+    }
+    next({
+        status: 400,
+        message: `Unable to delete - order status pending`
+    })
+    
+    
+  }
+
 module.exports = {
     list,
     create: [
@@ -118,5 +134,9 @@ module.exports = {
         bodyDataHas("status"),
         bodyDataHas("dishes"),
         update,
+    ],
+    delete: [
+        validateOrder,
+        destroy,
     ]
 }
