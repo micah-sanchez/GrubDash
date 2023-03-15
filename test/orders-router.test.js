@@ -172,7 +172,6 @@ describe("orders router", () => {
 
     test("returns 400 if dishes is not an array", async () => {
       const data = { ...validOrder, dishes: "some-dishes" };
-
       const response = await request(app)
         .post(ATTACHED_PATH)
         .set("Accept", "application/json")
