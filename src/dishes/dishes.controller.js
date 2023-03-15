@@ -34,6 +34,18 @@ function bodyDataHas(propertyName) {
       message: `Dish ID not found: ${dishId}`
     })
   }
+
+  function validateDishId(req, res, next) {
+    const { dishId } = req.params;
+    const { data: {id, name, description, price, image_url} = {} } = req.body
+    if (!Number(id) === Number(dishId)) {
+      return next ({
+          status: 400,
+          message: `Dish id does not match route id. Dish: ${id}, Route: ${dishId}`
+      })
+    }
+    next();
+  }
   
   function list(req, res, next) {
     res.json({data: dishes})
@@ -86,6 +98,7 @@ function bodyDataHas(propertyName) {
       read,],
     update: [
       validateDish, 
+      validateDishId,
       bodyDataHas("name"),
       bodyDataHas("description"),
       bodyDataHas("price"),
