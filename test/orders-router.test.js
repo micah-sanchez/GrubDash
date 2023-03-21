@@ -52,7 +52,6 @@ describe("orders router", () => {
             ],
           },
         });
-
       expect(response.body.error).toBeUndefined();
       expect(response.body.data).not.toBeUndefined();
       expect(response.body.data.id).not.toBeUndefined();
