@@ -108,7 +108,7 @@ function validateOrder(req, res, next) {
   const { orderId } = req.params;
   const foundOrder = orders.find((order) => order.id === orderId);
   res.locals.order = foundOrder; 
-  if (foundOrder) {
+  if (res.locals.order) {
     return next();
   }
   next({
@@ -139,17 +139,15 @@ function read(req, res, next) {
 
 //update function for existing function
 function update(req, res, next) {
-  const { orderId } = req.params;
-  const foundOrder = orders.find((order) => order.id === orderId);
-
   const { data: { deliverTo, mobileNumber, status, dishes } = {} } = req.body;
 
-  foundOrder.deliverTo = deliverTo;
-  foundOrder.mobileNumber = mobileNumber;
-  foundOrder.status = status;
-  foundOrder.dishes = dishes;
+  res.locals.order
+  res.locals.order.deliverTo = deliverTo;
+  res.locals.order.mobileNumber = mobileNumber;
+  res.locals.order.status = status;
+  res.locals.order.dishes = dishes;
 
-  res.json({ data: foundOrder });
+  res.json({ data: res.locals.order });
 }
 
 //delete function for existing function
