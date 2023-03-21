@@ -72,17 +72,13 @@ function create(req, res, next) {
 }
 
 function read(req, res, next) {
-  const { dishId } = req.params;
-  const foundDish = dishes.find((dish) => dish.id === dishId);
-
-  res.json({ data: foundDish });
+  res.json({ data: res.locals.dish });
 }
 
 function update(req, res, next) {
   const { dishId } = req.params;
-  const foundDish = dishes.find((dish) => dish.id === dishId);
 
-  if (dishId !== foundDish.id) {
+  if (dishId !== res.locals.dish.id) {
     next({
       status: 400,
       message: `id: ${id}`,
@@ -91,12 +87,12 @@ function update(req, res, next) {
 
   const { data: { name, description, price, image_url } = {} } = req.body;
 
-  foundDish.name = name;
-  foundDish.description = description;
-  foundDish.price = price;
-  foundDish.image_url = image_url;
+  res.locals.dish.name = name;
+  res.locals.dish.description = description;
+  res.locals.dish.price = price;
+  res.locals.dish.image_url = image_url;
 
-  res.json({ data: foundDish });
+  res.json({ data: res.locals.dish });
 }
 
 module.exports = {
