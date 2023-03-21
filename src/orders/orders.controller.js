@@ -107,6 +107,7 @@ function create(req, res, next) {
 function validateOrder(req, res, next) {
   const { orderId } = req.params;
   const foundOrder = orders.find((order) => order.id === orderId);
+  res.locals.order = foundOrder; 
   if (foundOrder) {
     return next();
   }
@@ -133,9 +134,7 @@ function validateIncomingOrderId(req, res, next) {
 
 //read function for indiv order
 function read(req, res, next) {
-  const { orderId } = req.params;
-  const foundOrder = orders.find((order) => order.id === orderId);
-  res.status(200).json({ data: foundOrder });
+  res.status(200).json({ data: res.locals.order });
 }
 
 //update function for existing function
